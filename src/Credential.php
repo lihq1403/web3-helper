@@ -1,13 +1,11 @@
 <?php
-
-/*
+/**
  * This file is part of the lihq1403/web3-helper.
  *
  * (c) lihq1403 <lihaiqing1994@163.com>
  *
  * This source file is subject to the MIT license that is bundled.
  */
-
 namespace Lihq1403\Web3Helper;
 
 use Elliptic\EC;
@@ -38,7 +36,7 @@ class Credential
 
     public function getAddress(bool $origin = false): string
     {
-        $address = '0x'.substr(Keccak::hash(substr(hex2bin($this->getPublicKey()), 1), 256), 24);
+        $address = '0x' . substr(Keccak::hash(substr(hex2bin($this->getPublicKey()), 1), 256), 24);
 
         if ($origin) {
             return $address;
