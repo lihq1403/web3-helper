@@ -9,8 +9,9 @@
 $ composer require lihq1403/web3-helper -vvv
 ```
 
-ganache
+ganache 客户端下载：https://trufflesuite.com/ganache/
 
+docker下载
 ```shell
 docker run -d -p 8545:8545 --name ganache trufflesuite/ganache
 ```
