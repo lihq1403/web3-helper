@@ -11,4 +11,6 @@ namespace Lihq1403\Web3Helper\Constants;
 class ErrorCode
 {
     const NODE_ERROR = 5000;
+
+    const CONTRACT_ERROR = 5001;
 }

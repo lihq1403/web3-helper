@@ -8,6 +8,8 @@
  */
 namespace Lihq1403\Web3Helper;
 
+use Lihq1403\Web3Helper\Contracts\ContractInterface;
+use Lihq1403\Web3Helper\Exceptions\ContractException;
 use Web3\Contract;
 
 class SmartContract extends Contract
@@ -20,15 +22,20 @@ class SmartContract extends Contract
 
     protected array $txMethods = [];
 
-    public function __construct(string $contractAddress, string $abi, ?NodeClient $web3 = null, ?Credential $credential = null)
+    public function __construct(ContractInterface $contract, ?NodeClient $web3 = null, ?Credential $credential = null)
     {
-        $this->at($contractAddress);
+        // 设置合约地址
+        $this->at($contract->getContractAddress());
 
+        // 选择web3节点
         is_null($web3) && $web3 = $this->_defaultWeb3();
 
-        parent::__construct($web3->getProvider(), $abi);
+        parent::__construct($web3->getProvider(), $contract->getAbi());
+
+        // 设置操作人
         $this->credential = $credential;
 
+        // 分类abi接口
         foreach ($this->functions as $function) {
             switch ($function['stateMutability'] ?? '') {
                 case 'view':
@@ -44,11 +51,10 @@ class SmartContract extends Contract
 
     public function __call($name, $arguments)
     {
-        if ($this->_isViewMethod($name)) {
-        }
-
-        if ($this->_isTxMethod($name)) {
-        }
+        $result = null;
+        $this->_isViewMethod($name) && $result = $this->execView($name, $arguments);
+        $this->_isTxMethod($name) && $result = $this->execTx($name, $arguments);
+        return $result;
     }
 
     public function setCredential(Credential $credential): self
@@ -63,6 +69,28 @@ class SmartContract extends Contract
         $this->web3 = $web3;
 
         return $this;
+    }
+
+    protected function execView($name, $arguments)
+    {
+        $cb = new Callback();
+        $arguments[] = $cb;
+        $this->call($name, ...$arguments);
+        $values = array_values($cb->result);
+        return count($values) > 1 ? $values : current($values);
+    }
+
+    protected function execTx($name, $arguments)
+    {
+        if (is_null($this->credential)) {
+            throw new ContractException('credential not set');
+        }
+        $data = $this->getData($name, ...$arguments);
+        $tx = [
+            'data' => '0x' . $data,
+        ];
+
+        return '';
     }
 
     private function _isTxMethod($name): bool
