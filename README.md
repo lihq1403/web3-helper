@@ -9,6 +9,12 @@
 $ composer require lihq1403/web3-helper -vvv
 ```
 
+ganache
+
+```shell
+docker run -d -p 8545:8545 --name ganache trufflesuite/ganache
+```
+
 ## Usage
 
 TODO

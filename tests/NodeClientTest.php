@@ -8,6 +8,7 @@
  */
 namespace Lihq1403\Web3Helper\Tests;
 
+use Lihq1403\Web3Helper\Constants\Net;
 use Lihq1403\Web3Helper\NodeClient;
 use phpseclib\Math\BigInteger;
 use PHPUnit\Framework\TestCase;
@@ -20,23 +21,21 @@ class NodeClientTest extends TestCase
 {
     public function testCreate()
     {
-        $node = NodeClient::create();
-
-        $this->assertInstanceOf(NodeClient::class, $node);
+        $this->assertInstanceOf(NodeClient::class, $this->_getNodeClient());
     }
 
     public function testGetBalance()
     {
-        $node = NodeClient::create();
+        $node = $this->_getNodeClient();
 
-        $balance = $node->getBalance('0xA120D1F347178DaaEd13983844490558D9b0c3A5');
+        $balance = $node->getBalance('0xC0169Cb4E02e5F2F8A322Dc1878eBE1bfbaA5ae3');
 
         $this->assertInstanceOf(BigInteger::class, $balance);
     }
 
     public function testBlockNumber()
     {
-        $node = NodeClient::create();
+        $node = $this->_getNodeClient();
 
         $number = $node->blockNumber();
 
@@ -45,7 +44,7 @@ class NodeClientTest extends TestCase
 
     public function testGetBlockByNumber()
     {
-        $node = NodeClient::create();
+        $node = $this->_getNodeClient();
 
         $block = $node->getBlockByNumber('17190255', true);
 
@@ -54,7 +53,7 @@ class NodeClientTest extends TestCase
 
     public function testGasPrice()
     {
-        $node = NodeClient::create();
+        $node = $this->_getNodeClient();
 
         $gas = $node->gasPrice();
 
@@ -63,19 +62,24 @@ class NodeClientTest extends TestCase
 
     public function testGetTransactionCount()
     {
-        $node = NodeClient::create();
+        $node = $this->_getNodeClient();
 
-        $nonce = $node->getTransactionCount('0xA120D1F347178DaaEd13983844490558D9b0c3A5');
+        $nonce = $node->getTransactionCount('0xC0169Cb4E02e5F2F8A322Dc1878eBE1bfbaA5ae3');
 
         $this->assertInstanceOf(BigInteger::class, $nonce);
     }
 
     public function testVersion()
     {
-        $node = NodeClient::create();
+        $node = $this->_getNodeClient();
 
         $result = $node->version();
 
         $this->assertIsString($result);
+    }
+
+    private function _getNodeClient()
+    {
+        return NodeClient::create(Net::TEST);
     }
 }
