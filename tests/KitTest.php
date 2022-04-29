@@ -8,7 +8,9 @@
  */
 namespace Lihq1403\Web3Helper\Tests;
 
+use Lihq1403\Web3Helper\Amount\EtherAmount;
 use Lihq1403\Web3Helper\Amount\WeiAmount;
+use Lihq1403\Web3Helper\DTO\TransactorDTO;
 use phpseclib\Math\BigInteger;
 
 /**
@@ -30,5 +32,17 @@ class KitTest extends BaseTest
         $this->assertEquals('1000', $amount->getEther());
         $this->assertEquals(1000, $amount->getQuotient());
         $this->assertEquals(0, $amount->getRemainder());
+    }
+
+    public function testTransfer()
+    {
+        $transactorDTO = new TransactorDTO();
+        $transactorDTO->to = '0x00f362c4F796040b19E1fB32FE67766A415B6E42';
+        $transactorDTO->value = EtherAmount::make('0.3');
+
+        $kit = $this->_getKit();
+        $result = $kit->transfer($transactorDTO);
+
+        $this->assertIsString($result);
     }
 }

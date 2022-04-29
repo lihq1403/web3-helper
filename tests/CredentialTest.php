@@ -1,18 +1,20 @@
 <?php
-
-/*
+/**
  * This file is part of the lihq1403/web3-helper.
  *
  * (c) lihq1403 <lihaiqing1994@163.com>
  *
  * This source file is subject to the MIT license that is bundled.
  */
-
 namespace Lihq1403\Web3Helper\Tests;
 
 use Lihq1403\Web3Helper\Credential;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class CredentialTest extends TestCase
 {
     public function testFromKey()
@@ -33,7 +35,6 @@ class CredentialTest extends TestCase
         $credential2 = Credential::fromKey($credential->getPrivateKey());
 
         $this->assertSame($credential->getAddress(), $credential2->getAddress());
-
     }
 
     public function testGetPublicKey()

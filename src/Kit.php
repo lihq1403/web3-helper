@@ -8,6 +8,7 @@
  */
 namespace Lihq1403\Web3Helper;
 
+use Lihq1403\Web3Helper\DTO\TransactorDTO;
 use phpseclib\Math\BigInteger;
 
 class Kit
@@ -16,10 +17,13 @@ class Kit
 
     protected Credential $credential;
 
+    protected Transactor $transactor;
+
     public function __construct(NodeClient $web3, Credential $credential)
     {
         $this->web3 = $web3;
         $this->credential = $credential;
+        $this->transactor = new Transactor($web3, $credential);
     }
 
     public function getCredential(): Credential
@@ -38,5 +42,10 @@ class Kit
             $address = $this->credential->getAddress();
         }
         return $this->web3->getBalance($address);
+    }
+
+    public function transfer(TransactorDTO $transactorDTO): string
+    {
+        return $this->transactor->transact($transactorDTO);
     }
 }

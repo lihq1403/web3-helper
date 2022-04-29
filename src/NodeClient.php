@@ -80,7 +80,7 @@ class NodeClient extends Web3
     /**
      * 返回指定地址发出的交易数量.
      */
-    public function getTransactionCount(string $address, string $defaultBlock = 'pending'): BigInteger
+    public function getTransactionCount(string $address, string $defaultBlock = 'pending'): string
     {
         $cb = new Callback();
         $this->getEth()->getTransactionCount($address, $defaultBlock, $cb);

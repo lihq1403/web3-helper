@@ -8,6 +8,7 @@
  */
 namespace Lihq1403\Web3Helper\DTO;
 
+use Lihq1403\Web3Helper\Amount\AbstractAmount;
 use Lihq1403\Web3Helper\Credential;
 use phpseclib\Math\BigInteger;
 
@@ -24,9 +25,9 @@ class TransactorDTO
     public string $to;
 
     /**
-     * @var ?BigInteger 要发送的币金额
+     * @var ?AbstractAmount 要发送的币金额
      */
-    public ?BigInteger $value = null;
+    public ?AbstractAmount $value = null;
 
     /**
      * @var ?string 可包括任意数据的可选字段
@@ -34,12 +35,12 @@ class TransactorDTO
     public ?string $data = null;
 
     /**
-     * @var ?string 交易计数
+     * @var ?int 交易计数
      */
-    public ?string $nonce = null;
+    public ?int $nonce = null;
 
     /**
-     * @var ?string 当前链的ID
+     * @var ?string 链id
      */
     public ?string $chainId = null;
 
@@ -53,6 +54,18 @@ class TransactorDTO
      */
     public ?BigInteger $gasLimit = null;
 
+    public function getEstimateGasTx(): array
+    {
+        return [
+            'from' => $this->from->getAddress(),
+            'to' => $this->to,
+            'nonce' => $this->nonce,
+            'chainId' => $this->chainId,
+            'value' => '0x' . $this->getValue(),
+            'gasPrice' => '0x' . $this->gasPrice->toHex(),
+        ];
+    }
+
     public function getTx(): array
     {
         return [
@@ -60,9 +73,14 @@ class TransactorDTO
             'to' => $this->to,
             'nonce' => $this->nonce,
             'chainId' => $this->chainId,
-            'value' => '0x' . $this->value->toHex(),
+            'value' => '0x' . $this->getValue(),
             'gasPrice' => '0x' . $this->gasPrice->toHex(),
             'gasLimit' => '0x' . $this->gasLimit->toHex(),
         ];
+    }
+
+    protected function getValue(): string
+    {
+        return (new BigInteger($this->value->getWei()))->toHex();
     }
 }

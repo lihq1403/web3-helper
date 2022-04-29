@@ -12,6 +12,7 @@ use Elliptic\EC;
 use Elliptic\EC\KeyPair;
 use kornrunner\Keccak;
 use Web3\Utils;
+use Web3p\EthereumTx\Transaction;
 
 class Credential
 {
@@ -24,16 +25,25 @@ class Credential
         $this->keyPair = $keyPair;
     }
 
-    public function getPublicKey()
+    /**
+     * 公钥.
+     */
+    public function getPublicKey(): string
     {
         return $this->keyPair->getPublic(false, 'hex');
     }
 
-    public function getPrivateKey()
+    /**
+     * 私钥.
+     */
+    public function getPrivateKey(): string
     {
         return $this->keyPair->getPrivate('hex');
     }
 
+    /**
+     * 地址.
+     */
     public function getAddress(bool $origin = false): string
     {
         $address = '0x' . substr(Keccak::hash(substr(hex2bin($this->getPublicKey()), 1), 256), 24);
@@ -59,5 +69,13 @@ class Credential
         $keyPair = $ec->keyFromPrivate($privateKey);
 
         return new static($keyPair);
+    }
+
+    /**
+     * 为交易生成签名.
+     */
+    public function signTransaction(array $raw): string
+    {
+        return '0x' . (new Transaction($raw))->sign($this->getPrivateKey());
     }
 }
