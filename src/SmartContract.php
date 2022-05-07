@@ -9,6 +9,7 @@
 namespace Lihq1403\Web3Helper;
 
 use Lihq1403\Web3Helper\Contracts\ContractInterface;
+use Lihq1403\Web3Helper\DTO\TransactorDTO;
 use Lihq1403\Web3Helper\Exceptions\ContractException;
 use Web3\Contract;
 
@@ -29,6 +30,7 @@ class SmartContract extends Contract
 
         // 选择web3节点
         is_null($web3) && $web3 = $this->_defaultWeb3();
+        $this->web3 = $web3;
 
         parent::__construct($web3->getProvider(), $contract->getAbi());
 
@@ -42,6 +44,7 @@ class SmartContract extends Contract
                     $this->viewMethods[] = $function['name'];
                     break;
                 case 'payable':
+                case 'nonpayable':
                     $this->txMethods[] = $function['name'];
                     break;
                 default:
@@ -57,20 +60,6 @@ class SmartContract extends Contract
         return $result;
     }
 
-    public function setCredential(Credential $credential): self
-    {
-        $this->credential = $credential;
-
-        return $this;
-    }
-
-    public function setWeb3(NodeClient $web3): self
-    {
-        $this->web3 = $web3;
-
-        return $this;
-    }
-
     protected function execView($name, $arguments)
     {
         $cb = new Callback();
@@ -80,17 +69,20 @@ class SmartContract extends Contract
         return count($values) > 1 ? $values : current($values);
     }
 
-    protected function execTx($name, $arguments)
+    protected function execTx($name, $arguments): string
     {
         if (is_null($this->credential)) {
             throw new ContractException('credential not set');
         }
         $data = $this->getData($name, ...$arguments);
-        $tx = [
-            'data' => '0x' . $data,
-        ];
 
-        return '';
+        $transactor = new Transactor($this->web3, $this->credential);
+        $dto = new TransactorDTO();
+        $dto->to = $this->getToAddress();
+        $dto->from = $this->credential;
+        $dto->data = '0x' . $data;
+
+        return $transactor->transact($dto);
     }
 
     private function _isTxMethod($name): bool

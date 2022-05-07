@@ -63,6 +63,7 @@ class TransactorDTO
             'chainId' => $this->chainId,
             'value' => '0x' . $this->getValue(),
             'gasPrice' => '0x' . $this->gasPrice->toHex(),
+            'data' => $this->data,
         ];
     }
 
@@ -76,6 +77,7 @@ class TransactorDTO
             'value' => '0x' . $this->getValue(),
             'gasPrice' => '0x' . $this->gasPrice->toHex(),
             'gasLimit' => '0x' . $this->gasLimit->toHex(),
+            'data' => $this->data,
         ];
     }
 
