@@ -5,16 +5,42 @@
 
 ## Installing
 
+
 ```shell
 $ composer require lihq1403/web3-helper -vvv
 ```
-
+### ganache本地开发环境
 ganache 客户端下载：https://trufflesuite.com/ganache/
 
 docker下载
 ```shell
 docker run -d -p 8545:8545 --name ganache trufflesuite/ganache
 ```
+
+### bsc测试链
+```
+Network Name（网络名称）：
+                           bsc-testnet
+New RPC URL（新增RPC URL）：
+                           https://data-seed-prebsc-1-s3.binance.org:8545/
+                     (或者) https://data-seed-prebsc-1-s2.binance.org:8545/
+                     (或者) https://data-seed-prebsc-2-s3.binance.org:8545/
+                     (或者) https://data-seed-prebsc-2-s1.binance.org:8545/
+                     (或者) https://data-seed-prebsc-1-s1.binance.org:8545/
+                     (或者) https://data-seed-prebsc-2-s2.binance.org:8545/
+Chain ID（链ID）：
+                           97
+Currency Symbol (optional)（符号（选填））：
+                           BNB
+Block Explorer URL (optional)（币安智能链浏览器）：
+                           https://testnet.bscscan.com
+```
+### bsc测试
+- 申请测试币 https://testnet.binance.org/faucet-smart
+- bsc测试网浏览器 https://testnet.bscscan.com/
+
+### 合约开发
+- 智能合约IDE http://remix.ethereum.org/
 
 ## Usage
 
