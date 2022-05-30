@@ -44,7 +44,34 @@ Block Explorer URL (optional)（币安智能链浏览器）：
 
 ## Usage
 
-TODO
+### 文件说明
+```
+src
+├── Amount // 金额相关的计算
+│   ├── AbstractAmount.php
+│   ├── BnqBnrAmount.php
+│   ├── EtherAmount.php
+│   └── WeiAmount.php
+├── BscHelper.php
+├── Callback.php
+├── Constants
+│   ├── ErrorCode.php
+│   └── Net.php
+├── Contracts
+│   └── ContractInterface.php
+├── Credential.php // 账户
+├── DTO
+│   └── TransactorDTO.php
+├── Exceptions
+│   ├── ContractException.php
+│   ├── NodeClientException.php
+│   └── Web3HelperException.php
+├── Kit.php // 工具
+├── NodeClient.php // 节点
+├── SmartContract.php // 智能合约
+└── Transactor.php // 交易
+
+```
 
 ## Contributing
 
